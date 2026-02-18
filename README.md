@@ -19,6 +19,8 @@ TypeScript-first SDK for connecting to Garmin, Fitbit, and more. One `npm instal
 ```bash
 npm run dev
 ```
+<img height="361" alt="image" src="https://github.com/user-attachments/assets/feaa5f99-dca6-4c57-b4b8-d55d9717b0b9" />
+<img height="361" alt="image" src="https://github.com/user-attachments/assets/c878d00b-a370-4c9f-b442-8db17ea492d6" />
 
 Opens an interactive playground at http://localhost:3001 with:
 - **Big OAuth buttons** → Connect Garmin / Fitbit instantly
@@ -406,5 +408,6 @@ This SDK was built with the assistance of AI tools, including **Claude Opus 4.6*
 ## License
 
 MIT — The Governor HQ
+
 
 

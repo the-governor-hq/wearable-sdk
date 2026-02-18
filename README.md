@@ -6,6 +6,33 @@ Ship wearable OAuth in 15 minutes.
 
 TypeScript-first SDK for connecting to Garmin, Fitbit, and more. One `npm install`, three API calls, done.
 
+**NEW:** 🎮 **OAuth Server Kit** — Not just an SDK! Includes a runnable playground for instant testing.
+
+---
+
+**👉 [GET STARTED NOW](GET_STARTED.md)** | [Quick Start](QUICKSTART.md) | [Setup Guide](SETUP_GUIDE.md) | [Playground Docs](apps/playground/README.md)
+
+---
+
+## ⚡ Try It Now
+
+```bash
+npm run dev
+```
+
+Opens an interactive playground at http://localhost:3001 with:
+- **Big OAuth buttons** → Connect Garmin / Fitbit instantly
+- **Visual flow** → See redirect URLs, state, scopes, token results
+- **Token management** → View stored tokens + refresh button
+- **Webhook tester** → Paste payloads, verify signatures, see handler logs
+
+**With ngrok tunnel:**
+```bash
+npm run dev:tunnel  # Exposes local server + prints callback URLs
+```
+
+➡️ [Full Playground Documentation](apps/playground/README.md)
+
 ## Features
 
 - **Passport.js-like DX** — Strategy pattern per provider, one-line Prisma storage
@@ -17,6 +44,7 @@ TypeScript-first SDK for connecting to Garmin, Fitbit, and more. One `npm instal
 - **2-month backfill** — One call to fetch historical data
 - **Zero dependencies** (almost) — Only `zod` in production
 - **ESM + CJS** — Works everywhere
+- **🎮 Interactive Playground** — Test OAuth flows without writing code
 
 ## Quick Start
 
@@ -326,6 +354,13 @@ import { GarminProvider } from "@the-governor-hq/wearable-sdk/garmin";
 // Just Fitbit provider
 import { FitbitProvider } from "@the-governor-hq/wearable-sdk/fitbit";
 ```
+
+## 📚 Documentation
+
+- **[Quick Start Guide](QUICKSTART.md)** — Get up and running in 3 minutes
+- **[Setup Guide](SETUP_GUIDE.md)** — Visual setup guide with diagrams
+- **[Playground README](apps/playground/README.md)** — Detailed playground documentation
+- **[Implementation Summary](IMPLEMENTATION_SUMMARY.md)** — Technical overview of what was built
 
 ## Provider Notes
 

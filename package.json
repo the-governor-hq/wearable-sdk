@@ -36,7 +36,11 @@
   ],
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch",
+    "dev": "npm run dev:playground",
+    "dev:sdk": "tsup --watch",
+    "dev:playground": "npm run build && cd apps/playground && npm install && npm run dev",
+    "dev:tunnel": "node scripts/tunnel.js",
+    "check": "node scripts/check-setup.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",

@@ -1,0 +1,25 @@
+// Prisma schema for wearable-sdk examples
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// WearableToken model for @the-governor-hq/wearable-sdk
+model WearableToken {
+  userId       String
+  provider     String   // "garmin" | "fitbit" | ...
+  accessToken  String
+  refreshToken String?
+  expiresAt    DateTime
+  scope        String?
+  tokenType    String   @default("Bearer")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@id([userId, provider])
+  @@index([userId])
+  @@map("wearable_tokens")
+}

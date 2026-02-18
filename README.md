@@ -2,7 +2,7 @@
 
 > **Work in progress.** This SDK is under active development and not yet intended for public or production use.
 
-**The Auth0 for Wearables** — Ship wearable OAuth in 15 minutes.
+Ship wearable OAuth in 15 minutes.
 
 TypeScript-first SDK for connecting to Garmin, Fitbit, and more. One `npm install`, three API calls, done.
 

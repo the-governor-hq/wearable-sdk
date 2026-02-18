@@ -1,0 +1,24 @@
+// ---------------------------------------------------------------------------
+// Prisma schema snippet for @the-governor-hq/wearable-sdk
+//
+// Copy this model into your schema.prisma file, then run:
+//   npx prisma migrate dev --name add-wearable-tokens
+//
+// Works with: PostgreSQL, MySQL, SQLite, MongoDB, CockroachDB
+// ---------------------------------------------------------------------------
+
+// model WearableToken {
+//   userId       String
+//   provider     String   // "garmin" | "fitbit" | ...
+//   accessToken  String   @db.Text
+//   refreshToken String?  @db.Text
+//   expiresAt    DateTime
+//   scope        String?
+//   tokenType    String   @default("Bearer")
+//   createdAt    DateTime @default(now())
+//   updatedAt    DateTime @updatedAt
+//
+//   @@id([userId, provider])
+//   @@index([userId])
+//   @@map("wearable_tokens")
+// }

@@ -25,7 +25,7 @@ import type {
   GarminRawActivity,
   GarminRawSleep,
   GarminRawDaily,
-  GarminUserProfile,
+  GarminUserIdResponse,
 } from "./types.js";
 
 // ---------------------------------------------------------------------------
@@ -54,8 +54,8 @@ export class GarminProvider extends BaseProvider {
 
   async fetchProviderUserId(accessToken: string): Promise<string | null> {
     try {
-      const { data } = await this.http.get<GarminUserProfile>(
-        `${GARMIN_API_BASE}${GARMIN_ENDPOINTS.userProfile}`,
+      const { data } = await this.http.get<GarminUserIdResponse>(
+        `${GARMIN_API_BASE}${GARMIN_ENDPOINTS.userId}`,
         {
           headers: { Authorization: `Bearer ${accessToken}` },
         },

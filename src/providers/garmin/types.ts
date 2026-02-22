@@ -93,11 +93,9 @@ export interface GarminRawHeartRate {
 }
 
 // ---------------------------------------------------------------------------
-// User Profile
+// User ID
 // ---------------------------------------------------------------------------
 
-export interface GarminUserProfile {
+export interface GarminUserIdResponse {
   userId: string;
-  displayName: string | null;
-  emailAddress: string | null;
 }

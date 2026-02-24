@@ -1,6 +1,6 @@
 {
   "name": "@the-governor-hq/wearable-sdk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TypeScript-first OAuth SDK for Garmin, Fitbit, and more. Ship wearable auth in 15 minutes.",
   "type": "module",
   "main": "./dist/index.cjs",

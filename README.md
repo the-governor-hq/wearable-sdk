@@ -1,39 +1,34 @@
 # @the-governor-hq/wearable-sdk
 
-> **Work in progress.** This SDK is under active development and not yet intended for public or production use.
-
 Ship wearable OAuth in 15 minutes.
 
 TypeScript-first SDK for connecting to Garmin, Fitbit, and more. One `npm install`, three API calls, done.
 
-**NEW:** 🎮 **OAuth Server Kit** — Not just an SDK! Includes a runnable playground for instant testing.
+Includes a runnable **OAuth Server Kit** playground for instant testing.
 
 ---
 
-**👉 [GET STARTED NOW](GET_STARTED.md)** | [Quick Start](QUICKSTART.md) | [Setup Guide](SETUP_GUIDE.md) | [Playground Docs](apps/playground/README.md)
-
----
-
-## ⚡ Try It Now
+## Try It Now
 
 ```bash
 npm run dev
 ```
+
 <img height="361" alt="image" src="https://github.com/user-attachments/assets/feaa5f99-dca6-4c57-b4b8-d55d9717b0b9" />
 <img height="361" alt="image" src="https://github.com/user-attachments/assets/c878d00b-a370-4c9f-b442-8db17ea492d6" />
 
 Opens an interactive playground at http://localhost:3001 with:
-- **Big OAuth buttons** → Connect Garmin / Fitbit instantly
-- **Visual flow** → See redirect URLs, state, scopes, token results
-- **Token management** → View stored tokens + refresh button
-- **Webhook tester** → Paste payloads, verify signatures, see handler logs
+- **Big OAuth buttons** — Connect Garmin / Fitbit instantly
+- **Visual flow** — See redirect URLs, state, scopes, token results
+- **Token management** — View stored tokens + refresh button
+- **Webhook tester** — Paste payloads, verify signatures, see handler logs
 
 **With ngrok tunnel:**
 ```bash
 npm run dev:tunnel  # Exposes local server + prints callback URLs
 ```
 
-➡️ [Full Playground Documentation](apps/playground/README.md)
+---
 
 ## Features
 
@@ -46,7 +41,26 @@ npm run dev:tunnel  # Exposes local server + prints callback URLs
 - **2-month backfill** — One call to fetch historical data
 - **Zero dependencies** (almost) — Only `zod` in production
 - **ESM + CJS** — Works everywhere
-- **🎮 Interactive Playground** — Test OAuth flows without writing code
+- **Interactive Playground** — Test OAuth flows without writing code
+
+---
+
+## Table of Contents
+
+- [Quick Start](#quick-start)
+- [Express Example](#express-example)
+- [API Reference](#api-reference)
+- [Normalized Data Types](#normalized-data-types)
+- [Token Storage (Prisma)](#token-storage-prisma)
+- [Sub-path Imports](#sub-path-imports)
+- [Playground Setup](#playground-setup)
+- [Webhook Testing](#webhook-testing)
+- [Provider Notes](#provider-notes)
+- [Architecture](#architecture)
+- [Commands Reference](#commands-reference)
+- [Troubleshooting](#troubleshooting)
+
+---
 
 ## Quick Start
 
@@ -100,7 +114,9 @@ const activities = await sdk.getActivities("garmin", {
 });
 ```
 
-## Express Example (~50 lines)
+---
+
+## Express Example
 
 ```typescript
 import express from "express";
@@ -150,6 +166,8 @@ app.get("/activities", async (req, res) => {
 
 app.listen(3000);
 ```
+
+---
 
 ## API Reference
 
@@ -214,6 +232,8 @@ await sdk.disconnect(provider, userId)
 await sdk.disconnectAll(userId)
 ```
 
+---
+
 ## Normalized Data Types
 
 ### `NormalizedActivity`
@@ -276,6 +296,8 @@ await sdk.disconnectAll(userId)
 }
 ```
 
+---
+
 ## Token Storage (Prisma)
 
 The SDK uses **Prisma** as its storage abstraction — one client handles Postgres, MySQL, SQLite, MongoDB, or any datasource Prisma supports.
@@ -317,9 +339,9 @@ const prisma = new PrismaClient();
 const sdk = new WearableSDK({ prisma, providers: { /* ... */ } });
 ```
 
-### Advanced: Custom Token Store
+### Custom Token Store
 
-If you don't use Prisma, you can implement the `TokenStore` interface directly:
+If you don't use Prisma, implement the `TokenStore` interface directly:
 
 ```typescript
 import type { TokenStore, OAuthTokens, ProviderName } from "@the-governor-hq/wearable-sdk";
@@ -341,6 +363,8 @@ const sdk = new WearableSDK({
 
 With no `prisma` or `tokenStore`, the SDK falls back to an in-memory store (with a console warning). Fine for quick prototyping — tokens are lost on restart.
 
+---
+
 ## Sub-path Imports
 
 ```typescript
@@ -357,12 +381,128 @@ import { GarminProvider } from "@the-governor-hq/wearable-sdk/garmin";
 import { FitbitProvider } from "@the-governor-hq/wearable-sdk/fitbit";
 ```
 
-## 📚 Documentation
+---
 
-- **[Quick Start Guide](QUICKSTART.md)** — Get up and running in 3 minutes
-- **[Setup Guide](SETUP_GUIDE.md)** — Visual setup guide with diagrams
-- **[Playground README](apps/playground/README.md)** — Detailed playground documentation
-- **[Implementation Summary](IMPLEMENTATION_SUMMARY.md)** — Technical overview of what was built
+## Playground Setup
+
+The SDK ships with an interactive Next.js playground for testing OAuth flows without writing code.
+
+### Prerequisites
+
+- Node.js 18+
+- OAuth credentials from Garmin and/or Fitbit
+
+### Get OAuth Credentials
+
+**Garmin:**
+1. Go to https://developer.garmin.com/
+2. Sign in and create a new application
+3. Note your Client ID and Client Secret
+
+**Fitbit:**
+1. Go to https://dev.fitbit.com/apps
+2. Register a new application
+3. Note your Client ID and Client Secret
+
+### Configure
+
+```bash
+cd apps/playground
+cp .env.example .env
+```
+
+Edit `.env`:
+
+```env
+DATABASE_URL="file:../../dev.db"
+
+GARMIN_CLIENT_ID=abc123...
+GARMIN_CLIENT_SECRET=xyz789...
+
+FITBIT_CLIENT_ID=def456...
+FITBIT_CLIENT_SECRET=uvw012...
+
+NEXT_PUBLIC_BASE_URL=http://localhost:3001
+```
+
+### Run
+
+From the root directory:
+
+```bash
+npm run dev
+```
+
+Opens http://localhost:3001 — enter a user ID, click Connect, and follow the OAuth flow.
+
+### Enable Real Callbacks with ngrok
+
+OAuth providers can't reach `localhost`, so you need a tunnel for real flows:
+
+```bash
+# In a separate terminal
+npm run dev:tunnel
+```
+
+This will print:
+```
+Public URL:      https://abc123.ngrok.io
+Garmin callback: https://abc123.ngrok.io/api/auth/garmin/callback
+Fitbit callback: https://abc123.ngrok.io/api/auth/fitbit/callback
+Webhook URL:     https://abc123.ngrok.io/api/webhook
+```
+
+Then:
+1. Copy the callback URLs from the terminal
+2. Add them to your provider consoles:
+   - **Garmin**: Developer Console → Your App → OAuth Redirect URIs
+   - **Fitbit**: Application Settings → OAuth 2.0 → Redirect URL
+3. Update `NEXT_PUBLIC_BASE_URL` in `.env` to the ngrok URL
+4. Restart the playground
+
+### Playground File Structure
+
+```
+apps/playground/
+├── app/
+│   ├── page.tsx              # OAuth flow UI
+│   ├── webhook/page.tsx      # Webhook tester UI
+│   ├── layout.tsx            # Layout with navigation
+│   └── api/
+│       ├── auth/[provider]/
+│       │   ├── route.ts             # Initiate OAuth
+│       │   └── callback/route.ts    # Handle OAuth callback
+│       ├── tokens/
+│       │   ├── route.ts             # List tokens
+│       │   └── refresh/route.ts     # Refresh token
+│       └── webhook/route.ts         # Webhook handler
+├── lib/sdk.ts                # Configured SDK instance
+└── .env                      # Your credentials
+```
+
+---
+
+## Webhook Testing
+
+1. Navigate to http://localhost:3001/webhook
+2. Select a provider (Garmin or Fitbit)
+3. Click "Load Example" → Activity or Sleep
+4. Click "Send Webhook"
+5. See the verification result and logs
+
+### Signature Verification
+
+Set `WEBHOOK_SECRET` in `.env` to enable:
+
+```env
+WEBHOOK_SECRET=your-webhook-secret
+```
+
+The handler verifies:
+- **Garmin**: `X-Garmin-Signature` header (HMAC-SHA256)
+- **Fitbit**: `X-Fitbit-Signature` header (HMAC-SHA1)
+
+---
 
 ## Provider Notes
 
@@ -370,6 +510,8 @@ import { FitbitProvider } from "@the-governor-hq/wearable-sdk/fitbit";
 
 - Requires a **Garmin Connect Developer** account
 - Uses OAuth 2.0 + PKCE (code challenge S256)
+- Authorization URL: `https://connect.garmin.com/oauth2Confirm`
+- Token URL: `https://diauth.garmin.com/di-oauth2-service/oauth/token`
 - API access requires legal entity / enterprise approval
 - Supports webhooks for real-time push notifications
 
@@ -379,6 +521,8 @@ import { FitbitProvider } from "@the-governor-hq/wearable-sdk/fitbit";
 - Uses OAuth 2.0 with Basic Auth + optional PKCE
 - Rate limit: 150 requests/hour (personal apps)
 - Sleep data available via v1.2 API
+
+---
 
 ## Architecture
 
@@ -401,6 +545,49 @@ src/
     ├── pkce.ts             # PKCE generation
     └── logger.ts           # Logger utilities
 ```
+
+---
+
+## Commands Reference
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start playground (port 3001) |
+| `npm run dev:tunnel` | Start ngrok + print callback URLs |
+| `npm run dev:sdk` | Build SDK in watch mode |
+| `npm run build` | Build SDK for production |
+| `npm test` | Run test suite |
+| `npm run typecheck` | TypeScript check |
+| `npm run check` | Verify setup is correct |
+
+---
+
+## Troubleshooting
+
+**Port already in use:**
+```bash
+npx kill-port 3001
+```
+
+**Database locked:**
+```bash
+# Windows
+Get-Process node | Stop-Process -Force
+# Mac/Linux
+pkill node
+```
+
+**OAuth redirect URI mismatch:**
+- Ensure `NEXT_PUBLIC_BASE_URL` in `.env` matches your actual URL
+- Callback URLs in provider consoles must match exactly
+
+**Module not found:**
+```bash
+cd apps/playground && npm install
+```
+
+---
+
 ## Acknowledgements
 
 This SDK was built with the assistance of AI tools, including **Claude Opus 4.6**, **Claude Sonnet 4.5**, and **Gemini 3.0**.
@@ -408,6 +595,3 @@ This SDK was built with the assistance of AI tools, including **Claude Opus 4.6*
 ## License
 
 MIT — The Governor HQ
-
-
-
